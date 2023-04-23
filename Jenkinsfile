@@ -1,5 +1,4 @@
 #!/usr/bin/env groovy
-env.PATH = "${env.PATH}:/usr/bin/docker"
 pipeline {
     agent any
     tools {
