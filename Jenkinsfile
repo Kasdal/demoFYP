@@ -26,7 +26,6 @@ pipeline {
             steps {
                 script {
                     gv.buildDockerImage()
-                    }
                 }
             }
         }
