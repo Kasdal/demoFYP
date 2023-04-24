@@ -8,6 +8,13 @@ pipeline {
         maven 'maven'
     }
     stages {
+        stage('increment version of the app') {
+            steps {
+                script {
+                    incrementVersion()
+                }
+            }
+        }
         stage("init") {
             steps {
                 script {
