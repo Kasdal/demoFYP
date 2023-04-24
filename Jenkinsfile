@@ -27,9 +27,9 @@ pipeline {
         stage('build docker image and push to docker hub') {
             steps {
                 script {
-                    buildDockerImage()
+                    buildDockerImage 'kasdal/myapp:app-2.0'
                     loginDocker()
-                    pushDockerImage()
+                    pushDockerImage 'kasdal/myapp:app-2.0'
                 }
             }
         }
