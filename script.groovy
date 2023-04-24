@@ -1,14 +1,16 @@
 def buildPackage() {
     echo "build the application..."
     sh 'mvn clean package'
+    def matcher = readFile('target/classes/application.properties') =~ 'artifactId=(.+)'
+    def artifactId = matcher[0][1]
+    env.JAR_NAME = "${artifactId}-${env.IMAGE_NAME}.jar"
 }
 
 def buildDockerImage() {
     echo "build the docker image..."
-    echo "Build the docker image..."
     withCredentials([usernamePassword(credentialsId: 'docker-cred', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
         def imageName = "$USER/myapp:$env.IMAGE_NAME"
-        sh "docker build --build-arg APP_VERSION=$env.IMAGE_NAME -t $imageName ."
+        sh "docker build --build-arg JAR_NAME=$env.JAR_NAME -t $imageName ."
         sh "echo $PASS | docker login -u $USER --password-stdin"
         sh "docker push $imageName"
     }
