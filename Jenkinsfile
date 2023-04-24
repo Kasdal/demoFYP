@@ -7,6 +7,7 @@ pipeline {
     tools {
         maven 'maven'
     }
+    stages {
         stage("init") {
             steps {
                 script {
@@ -14,7 +15,7 @@ pipeline {
                 }
             }
         }
-        stage('increment version') {
+        stage('increment version of the app') {
             steps {
                 script {
                     gv.incrementVersion()
