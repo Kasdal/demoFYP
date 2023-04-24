@@ -10,6 +10,11 @@ def getAppVersion() {
 
 def buildDockerImage(appVersion) {
     echo "build the docker image..."
+
+    // Rename the JAR file
+    def appArtifactId = "java-maven-app"
+    sh "mv ./target/${appArtifactId}-${appVersion}.jar ./target/${appArtifactId}-${appVersion}-${env.BUILD_NUMBER}.jar"
+
     withCredentials([usernamePassword(credentialsId: 'docker-cred', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
         def imageName = "$USER/myapp:$env.IMAGE_NAME"
         sh "docker build --build-arg APP_VERSION=${appVersion} --build-arg BUILD_NUMBER=$env.BUILD_NUMBER -t $imageName ."
@@ -27,7 +32,6 @@ def incrementVersion() {
     def version = matcher[0][1]
     env.IMAGE_NAME = "$version-$BUILD_NUMBER"
 }
-
 
 def deployTheApp() {
     echo 'deploy the application...'
