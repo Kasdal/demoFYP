@@ -9,6 +9,8 @@ pipeline {
     }
     environment {
         IMAGE_NAME = 'kasdal/myapp:app-2.0'
+        MY_IP = credentials('MY_IP')
+        JENKINS_IP = credentials('JENKINS_IP')
     }
     stages {
         stage('build app') {
@@ -32,7 +34,7 @@ pipeline {
         stage('provision server') {
             environment {
                 AWS_ACCESS_KEY_ID = credentials('jenkins_aws_access_key_id')
-                AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_secret_access_key_id')
+                AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_secret_access_key')
                 AWS_SESSION_TOKEN = credentials('aws_session_token')
                 TF_VAR_env_prefix = 'test'
             }
@@ -40,7 +42,7 @@ pipeline {
                 script {
                     dir('terraform') {
                         sh "terraform init"
-                        sh "terraform apply --auto-approve"
+                        sh "terraform apply -auto-approve -var=\"my_ip=${env.MY_IP}\" -var=\"jenkins_ip=${env.JENKINS_IP}\""
                         EC2_PUBLIC_IP = sh(
                             script: "terraform output ec2_public_ip",
                             returnStdout: true
