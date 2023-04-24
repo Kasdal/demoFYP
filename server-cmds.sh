@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -x
 
 export IMAGE=$1
 export DOCKER_USER=$2
