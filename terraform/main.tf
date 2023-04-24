@@ -1,7 +1,7 @@
 terraform {
     required_version = ">= 0.12"
     backend "s3" {
-        bucket = "fyp-bucket-2023"
+        bucket = "fyp-bucket-20233"
         key = "myapp/state.tfstate"
         region = "us-east-1"
     }
