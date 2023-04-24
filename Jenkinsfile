@@ -1,5 +1,7 @@
 #!/usr/bin/env groovy
 
+@Library('jenkins-shared')
+
 def gv
 
 pipeline {
@@ -18,18 +20,20 @@ pipeline {
         stage('build') {
             steps {
                 script {
-                    gv.buildPackage()
+                    buildPackage()
                 }
             }
         }
-        stage('build docker image') {
+        stage('build docker image and push to docker hub') {
             steps {
                 script {
-                    gv.buildDockerImage()
+                    buildDockerImage()
+                    loginDocker()
+                    pushDockerImage()
                 }
             }
         }
-        stage('test') {
+        stage('deploy') {
             steps {
                 script {
                     gv.deployTheApp()
