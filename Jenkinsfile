@@ -7,18 +7,17 @@ pipeline {
     tools {
         maven 'maven'
     }
-    stages {
-        stage('increment version of the app') {
-            steps {
-                script {
-                    gv.incrementVersion()
-                }
-            }
-        }
         stage("init") {
             steps {
                 script {
                     gv = load "script.groovy"
+                }
+            }
+        }
+        stage('increment version') {
+            steps {
+                script {
+                    gv.incrementVersion()
                 }
             }
         }
