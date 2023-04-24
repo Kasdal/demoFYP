@@ -1,6 +1,6 @@
 def buildPackage() {
     echo "build the application..."
-    sh "mvn clean package -DfinalName=java-maven-app-\${project.version}-${env.BUILD_NUMBER}"
+    sh 'mvn clean package -DfinalName=java-maven-app-\\${project.version}-' + "${env.BUILD_NUMBER}"
 }
 
 def buildDockerImage() {
