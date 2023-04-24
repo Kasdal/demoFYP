@@ -22,7 +22,7 @@ pipeline {
                 }
             }
         }
-        stage('build docker image and push to docker hub') {
+        stage('build docker image') {
             steps {
                 script {
                     gv.buildDockerImage()
