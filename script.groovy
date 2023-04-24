@@ -1,16 +1,17 @@
 def buildPackage() {
-    echo "build the application..."
-    sh 'mvn clean package'
-    def matcher = readFile('pom.xml') =~ '<artifactId>(.+)</artifactId>'
-    def artifactId = matcher[0][1]
-    env.JAR_NAME = "${artifactId}-${env.IMAGE_NAME}.jar"
+    echo 'build the package...'
+    sh "mvn versions:set"
+    sh "mvn clean package"
+    def pom = readMavenPom file: 'pom.xml'
+    def newVersion = pom.getVersion()
+    env.NEW_VERSION = newVersion
 }
 
 def buildDockerImage() {
     echo "build the docker image..."
     withCredentials([usernamePassword(credentialsId: 'docker-cred', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
         def imageName = "$USER/myapp:$env.IMAGE_NAME"
-        sh "docker build --build-arg JAR_NAME=$env.JAR_NAME -t $imageName ."
+        sh "docker build --build-arg JAR_NAME=java-maven-app-${env.NEW_VERSION}.jar -t kasdal/myapp:${env.NEW_VERSION} ."
         sh "echo $PASS | docker login -u $USER --password-stdin"
         sh "docker push $imageName"
     }

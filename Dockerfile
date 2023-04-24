@@ -6,4 +6,4 @@ EXPOSE 8080
 
 COPY ./target/${JAR_NAME} /usr/app/
 
-ENTRYPOINT ["sh", "-c", "java -jar /usr/app/${JAR_NAME}"]
+ENTRYPOINT ["java", "-jar", "/usr/app/${JAR_NAME}"]
