@@ -1,7 +1,7 @@
 def buildPackage() {
     echo "build the application..."
     sh 'mvn clean package'
-    def matcher = readFile('target/classes/application.properties') =~ 'artifactId=(.+)'
+    def matcher = readFile('pom.xml') =~ '<artifactId>(.+)</artifactId>'
     def artifactId = matcher[0][1]
     env.JAR_NAME = "${artifactId}-${env.IMAGE_NAME}.jar"
 }
@@ -15,7 +15,6 @@ def buildDockerImage() {
         sh "docker push $imageName"
     }
 }
-
 def deployTheApp() {
     echo 'deploy the application...'
 }
