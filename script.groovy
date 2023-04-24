@@ -1,22 +1,16 @@
 def buildPackage() {
     echo "build the application..."
-    sh 'mvn clean package'
+    sh "mvn clean package -DfinalName=java-maven-app-\${project.version}-${env.BUILD_NUMBER}"
 }
 
 def buildDockerImage() {
     echo "build the docker image..."
-    echo "Build the docker image..."
     withCredentials([usernamePassword(credentialsId: 'docker-cred', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
         def imageName = "$USER/myapp:$env.IMAGE_NAME"
-        sh "docker build --build-arg APP_VERSION=$env.IMAGE_NAME -t $imageName ."
+        sh "docker build --build-arg APP_VERSION=$env.APP_VERSION --build-arg BUILD_NUMBER=$env.BUILD_NUMBER -t $imageName ."
         sh "echo $PASS | docker login -u $USER --password-stdin"
         sh "docker push $imageName"
     }
-}
-
-
-def deployTheApp() {
-    echo 'deploy the application...'
 }
 
 def incrementVersion() {
@@ -28,5 +22,11 @@ def incrementVersion() {
     def version = matcher[0][1]
     env.IMAGE_NAME = "$version-$BUILD_NUMBER"
 }
+
+
+def deployTheApp() {
+    echo 'deploy the application...'
+}
+
 
 return this
