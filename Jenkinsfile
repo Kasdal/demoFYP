@@ -5,7 +5,7 @@
 pipeline {
     agent any
     tools {
-        maven 'Maven'
+        maven 'maven'
     }
     environment {
         IMAGE_NAME = 'kasdal/myapp:app-2.0'
