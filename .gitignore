@@ -1,1 +1,2 @@
 .idea/*
+terraform/variables.tf
