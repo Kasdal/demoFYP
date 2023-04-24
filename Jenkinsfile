@@ -32,7 +32,8 @@ pipeline {
         stage('build docker image  and push to docker hub') {
             steps {
                 script {
-                    gv.buildDockerImage()
+                    def appVersion = gv.getAppVersion()
+                    gv.buildDockerImage(appVersion)
                 }
             }
         }

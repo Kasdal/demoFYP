@@ -3,11 +3,16 @@ def buildPackage() {
     sh 'mvn clean package -DfinalName=java-maven-app-\\${project.version}-' + "${env.BUILD_NUMBER}"
 }
 
-def buildDockerImage() {
+def getAppVersion() {
+    def pom = readMavenPom file: 'pom.xml'
+    return pom.getVersion()
+}
+
+def buildDockerImage(appVersion) {
     echo "build the docker image..."
     withCredentials([usernamePassword(credentialsId: 'docker-cred', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
         def imageName = "$USER/myapp:$env.IMAGE_NAME"
-        sh "docker build --build-arg APP_VERSION=$env.APP_VERSION --build-arg BUILD_NUMBER=$env.BUILD_NUMBER -t $imageName ."
+        sh "docker build --build-arg APP_VERSION=${appVersion} --build-arg BUILD_NUMBER=$env.BUILD_NUMBER -t $imageName ."
         sh "echo $PASS | docker login -u $USER --password-stdin"
         sh "docker push $imageName"
     }
@@ -27,6 +32,5 @@ def incrementVersion() {
 def deployTheApp() {
     echo 'deploy the application...'
 }
-
 
 return this
