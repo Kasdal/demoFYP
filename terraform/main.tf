@@ -19,27 +19,40 @@ resource "aws_vpc" "myapp_vpc" {
   }
 }
 
-resource "aws_subnet" "myapp_subnet" {
-  vpc_id     = aws_vpc.myapp_vpc.id
-  cidr_block = "10.1.1.0/24"
+resource "aws_subnet" "myapp_subnet_1" {
+  vpc_id                  = aws_vpc.myapp_vpc.id
+  cidr_block              = "10.0.1.0/24"
+  availability_zone       = "<first_availability_zone>"
+  map_public_ip_on_launch = true
 
   tags = {
-    Name        = "myapp-subnet"
-    Environment = var.env_prefix
+    Name = "myapp-subnet-1"
   }
 }
 
-module "eks" {
-  source  = "terraform-aws-modules/eks/aws"
-  version = "~> 19.0"
-
-  cluster_name = local.cluster_name
-  subnet_ids   = [aws_subnet.myapp_subnet.id]
+resource "aws_subnet" "myapp_subnet_2" {
+  vpc_id                  = aws_vpc.myapp_vpc.id
+  cidr_block              = "10.0.2.0/24"
+  availability_zone       = "<second_availability_zone>"
+  map_public_ip_on_launch = true
 
   tags = {
-    Terraform   = "true"
-    Environment = var.env_prefix
+    Name = "myapp-subnet-2"
   }
+}
+
+
+module "eks" {
+  source = "terraform-aws-modules/eks/aws"
+
+  cluster_name = "myapp-cluster"
+  subnets      = [aws_subnet.myapp_subnet_1.id, aws_subnet.myapp_subnet_2.id]
+
+  tags = {
+    Terraform = "true"
+    Environment = "dev"
+  }
+
 
   vpc_id = aws_vpc.myapp_vpc.id
 
