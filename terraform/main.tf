@@ -49,8 +49,8 @@ module "eks" {
 }
 
 resource "local_file" "kubeconfig" {
-  filename = "kubeconfig.yaml"
-  content  = module.eks.kubeconfig
+  filename = "${path.root}/kubeconfig_${local.cluster_name}"
+  content  = module.eks.kubeconfig_output_path
 }
 
 output "eks_cluster_endpoint" {
