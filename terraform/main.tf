@@ -58,7 +58,7 @@ module "eks" {
 
 resource "local_file" "kubeconfig" {
   filename = "${path.root}/kubeconfig_${local.cluster_name}"
-  source = module.eks.kubeconfig_output_path
+  source = module.eks.kubeconfig_filename
 }
 
 output "eks_cluster_endpoint" {
