@@ -39,7 +39,7 @@ pipeline {
             }
             steps {
                 script {
-                    dir('terraform-eks') {
+                    dir('terraform') {
                         sh "terraform init"
                         sh "terraform apply -auto-approve"
                         sh "aws eks update-kubeconfig --region us-east-1 --name myapp-eks-cluster"
