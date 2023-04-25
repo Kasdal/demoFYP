@@ -26,9 +26,11 @@ resource "aws_subnet" "myapp_subnet" {
 }
 
 module "eks" {
-  source = "terraform-aws-modules/eks/aws"
+  source  = "terraform-aws-modules/eks/aws"
+  version = "~> 19.0"
 
   cluster_name = local.cluster_name
+  subnet_ids   = [aws_subnet.myapp_subnet.id]
 
   tags = {
     Terraform   = "true"
@@ -37,26 +39,12 @@ module "eks" {
 
   vpc_id = aws_vpc.myapp_vpc.id
 
-  vpc_config = {
-    subnet_ids = [aws_subnet.myapp_subnet.id]
-  }
-
   node_groups_defaults = {
-    ami_type  = "AL2_x86_64"
-    disk_size = 20
-  }
+    desired_capacity = 2
+    max_capacity     = 10
+    min_capacity     = 1
 
-  node_groups = {
-    eks_nodes = {
-      instance_type = "t2.micro"
-      additional_tags = {
-        Terraform   = "true"
-        Environment = var.env_prefix
-      }
-      desired_capacity = 1
-      max_capacity     = 1
-      min_capacity     = 1
-    }
+    instance_type = "t3.micro"
   }
 }
 
