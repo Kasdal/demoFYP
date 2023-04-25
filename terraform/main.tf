@@ -42,7 +42,7 @@ module "eks" {
   source = "terraform-aws-modules/eks/aws"
 
   cluster_name = "myapp-cluster"
-  subnets_ids  = [aws_subnet.myapp_subnet_1.id, aws_subnet.myapp_subnet_2.id]
+  subnet_ids  = [aws_subnet.myapp_subnet_1.id, aws_subnet.myapp_subnet_2.id]
 
   tags = {
     Terraform = "true"
