@@ -61,5 +61,6 @@ output "eks_cluster_endpoint" {
 }
 
 output "kubeconfig" {
-  value = module.eks.kubeconfig
+  value = module.eks.kubeconfig_aws_authenticator
 }
+
