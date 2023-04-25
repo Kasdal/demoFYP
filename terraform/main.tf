@@ -38,17 +38,17 @@ module "eks" {
 
   vpc_id = aws_vpc.myapp_vpc.id
 
-  node_groups_defaults = {
-    ami_type  = "AL2_x86_64"
-    disk_size = 20
-  }
-
-  node_groups = {
+  node_groups_launch_template = {
     eks_nodes = {
-      desired_capacity = 1
-      max_capacity     = 1
-      min_capacity     = 1
-      instance_type    = "t2.micro"
+      name                 = "eks_nodes"
+      ami_type             = "AL2_x86_64"
+      disk_size_gb         = 20
+      instance_type        = "t2.micro"
+      additional_tags      = {}
+      desired_capacity     = 1
+      max_capacity         = 1
+      min_capacity         = 1
+      force_update_version = true
     }
   }
 }
