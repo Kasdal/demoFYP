@@ -39,12 +39,12 @@ module "eks" {
 
   vpc_id = aws_vpc.myapp_vpc.id
 
-  node_groups_defaults = {
+  eks_managed_node_group_defaults = {
     desired_capacity = 2
     max_capacity     = 10
     min_capacity     = 1
 
-    instance_type = "t3.micro"
+    instance_types = ["t3.micro"]
   }
 }
 
