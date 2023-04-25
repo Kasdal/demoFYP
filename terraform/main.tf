@@ -58,7 +58,7 @@ module "eks" {
 
 resource "local_file" "kubeconfig" {
   filename = "${path.root}/kubeconfig_${local.cluster_name}"
-  content  = module.eks.kubeconfig_aws_authenticator
+  content  = module.eks.kubeconfig
 }
 
 output "eks_cluster_endpoint" {
