@@ -32,21 +32,22 @@ pipeline {
             }
         }
         stage('provision EKS') {
-            environment {
-                AWS_ACCESS_KEY_ID = credentials('jenkins_aws_access_key_id')
-                AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_secret_access_key_id')
-                TF_VAR_env_prefix = 'test'
-            }
-            steps {
-                script {
-                    dir('terraform') {
-                        sh "terraform init"
-                        sh "terraform apply -auto-approve"
-                        sh "aws eks update-kubeconfig --region us-east-1 --name myapp-eks-cluster"
-                    }
-                }
+    environment {
+        AWS_ACCESS_KEY_ID = credentials('jenkins_aws_access_key_id')
+        AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_secret_access_key_id')
+        TF_VAR_env_prefix = 'test'
+    }
+    steps {
+        script {
+            dir('terraform') {
+                sh "terraform init"
+                sh "terraform apply -auto-approve"
+                sh "terraform output -raw kubeconfig > kubeconfig.yaml"
+                sh "aws eks update-kubeconfig --region us-east-1 --name myapp-eks-cluster --kubeconfig kubeconfig.yaml"
             }
         }
+    }
+}
         stage('deploy to EKS') {
             steps {
                 script {
