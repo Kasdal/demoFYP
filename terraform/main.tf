@@ -38,7 +38,7 @@ module "eks" {
 
   vpc_id = aws_vpc.myapp_vpc.id
 
-  node_groups_launch_template = {
+  node_groups = {
     eks_nodes = {
       name                 = "eks_nodes"
       ami_type             = "AL2_x86_64"
