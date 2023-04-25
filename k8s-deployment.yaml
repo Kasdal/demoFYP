@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-maven-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: java-maven-app
+  template:
+    metadata:
+      labels:
+        app: java-maven-app
+    spec:
+      containers:
+      - name: java-maven-app
+        image: ${IMAGE}
+        ports:
+        - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: java-maven-app
+spec:
+  selector:
+    app: java-maven-app
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer

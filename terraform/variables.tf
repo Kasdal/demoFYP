@@ -1,23 +1,3 @@
-variable vpc_cidr_block {
-    default = "10.0.0.0/16"
+variable "kubernetes_version" {
+  default = "1.20"
 }
-variable subnet_cidr_block {
-    default = "10.0.10.0/24"
-}
-variable env_prefix {
-    default = "dev"
-}
-variable instance_type {
-    default = "t2.micro"
-}
-variable region {
-    default = "us-east-1"
-}
-variable "my_ip" {
-  type = string
-}
-
-variable "jenkins_ip" {
-  type = string
-}
-
