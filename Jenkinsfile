@@ -21,6 +21,14 @@ pipeline {
                }
             }
         }
+        stage('test the application') {
+            steps {
+                script {
+                    echo 'running tests...'
+                    sh 'mvn test'
+                }
+            }
+        }
         stage('build image') {
             steps {
                 script {
