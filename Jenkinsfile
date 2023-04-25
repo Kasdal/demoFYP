@@ -8,7 +8,7 @@ pipeline {
         maven 'maven'
     }
     environment {
-        IMAGE_NAME = 'kasdal/myapp:app-2.0'
+        IMAGE_NAME = "kasdal/myapp:app-${env.BUILD_NUMBER}"
         MY_IP = credentials('MY_IP')
         JENKINS_IP = credentials('JENKINS_IP')
     }
