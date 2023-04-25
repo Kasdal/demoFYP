@@ -3,21 +3,40 @@ provider "kubernetes" {
 }
 
 locals {
-  cluster_name = "your-eks-cluster-name"
+  cluster_name = "myapp-cluster"
+}
+
+resource "aws_vpc" "myapp_vpc" {
+  cidr_block = "10.1.0.0/16"
+
+  tags = {
+    Name        = "myapp-vpc"
+    Environment = var.env_prefix
+  }
+}
+
+resource "aws_subnet" "myapp_subnet" {
+  vpc_id     = aws_vpc.myapp_vpc.id
+  cidr_block = "10.1.1.0/24"
+
+  tags = {
+    Name        = "myapp-subnet"
+    Environment = var.env_prefix
+  }
 }
 
 module "eks" {
   source = "terraform-aws-modules/eks/aws"
 
   cluster_name = local.cluster_name
-  subnets      = [aws_subnet.myapp-subnet-1.id]
+  subnets      = [aws_subnet.myapp_subnet.id]
 
   tags = {
-    Terraform = "true"
+    Terraform   = "true"
     Environment = var.env_prefix
   }
 
-  vpc_id = aws_vpc.myapp-vpc.id
+  vpc_id = aws_vpc.myapp_vpc.id
 
   node_groups_defaults = {
     ami_type  = "AL2_x86_64"
