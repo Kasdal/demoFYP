@@ -13,7 +13,6 @@ pipeline {
         JENKINS_IP = credentials('JENKINS_IP')
     }
     stages {
-
         stage('build app') {
             steps {
                script {
@@ -30,7 +29,7 @@ pipeline {
                 }
             }
         }
-        stage('build image and push to docker hub') {
+        stage('build image and push to dockerhub') {
             steps {
                 script {
                    echo 'building docker image...'
@@ -66,7 +65,7 @@ pipeline {
             steps {
                 script {
                    echo "waiting for EC2 server to initialize" 
-                   sleep(time: 1, unit: "SECONDS") 
+                   sleep(time: 200, unit: "SECONDS") 
 
                    echo 'deploying docker image to EC2...'
                    echo "${EC2_PUBLIC_IP}"
@@ -81,18 +80,6 @@ pipeline {
                    }
                 }
             }
-        }
-    }
-    post {
-        failure {
-            mail to: 'januel.caliber@doojazz.com',
-                 subject: "Pipeline failed: ${currentBuild.fullDisplayName}",
-                 body: "The pipeline has failed. Check the following link for details:\n\n${env.BUILD_URL}"
-        }
-        success {
-            mail to: 'januel.caliber@doojazz.com',
-                 subject: "Pipeline succeeded: ${currentBuild.fullDisplayName}",
-                 body: "The pipeline has completed successfully. Check the following link for details:\n\n${env.BUILD_URL}"
         }
     }
 }
